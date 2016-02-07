@@ -1,5 +1,5 @@
 FROM ubuntu:14.04
-MAINTAINER Manzoor
+MAINTAINER AntoDaniel
 
 #Installation of CITO and dependencies
 
