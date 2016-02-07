@@ -23,15 +23,17 @@ RUN apt-get update && apt-get install -y debconf-utils \
     && apt-get install -y mysql-client mysql-server-5.5 -o pkg::Options::="--force-confdef" -o pkg::Options::="--force-confold" --fix-missing \
     && /etc/init.d/mysql start
 COPY sample.sh /
+COPY create_cito.sql /
+COPY citoengine.conf /
 RUN /sample.sh
-RUN cp /opt/citoengine/conf/citoengine.conf-example /opt/citoengine/conf/citoengine.conf
+RUN cp /citoengine.conf /opt/citoengine/conf/citoengine.conf
 
 #Initializing the tables and creating an admin account.
 
 CMD source /opt/citoengine/bin/activate
-RUN cd /opt/citoengine/app && python manage.py migrate
+RUN cd /opt/citoengine/app && /etc/init.d/mysql start && python manage.py makemigrations && python manage.py migrate
 RUN sh -c '/opt/citoengine/bin/create-django-secret.py > /opt/citoengine/app/settings/secret_key.py'
-RUN cd /opt/citoengine/app && python manage.py createsuperuser
+RUN service mysql start && cd /opt/citoengine/app && python manage.py createsuperuser
 
 #RUN dpkg-reconfigure mysql-server-5.5 
 

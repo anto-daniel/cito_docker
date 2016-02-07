@@ -1,0 +1,2 @@
+CREATE DATABASE citoengine;
+GRANT ALL PRIVILEGES ON citoengine.* TO 'citoengine_user'@'localhost' IDENTIFIED BY 'MINISTRYOFSILLYWALKS' with GRANT OPTION;
